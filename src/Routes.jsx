@@ -1,17 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Homepage from './Homepage';
+import Login from './Login';
+import HomePage from './Homepage';
 import AddTourPage from './AddTourPage';
 
-function App() {
+const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/homepage" element={<HomePage />} />
         <Route path="/add-tour" element={<AddTourPage />} />
       </Routes>
     </Router>
   );
-}
+};
 
-export default App;
+export default AppRoutes;

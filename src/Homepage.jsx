@@ -9,9 +9,22 @@ const Homepage = () => {
   const [projects, setProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-
+  // Fetch user data
+  useEffect(() => {
+    fetch('http://localhost:5000/auth/user', { credentials: 'include' })
+      .then(response => response.json())
+      .then(data => {
+        if (data) {
+          setUser(data);
+        } else {
+          navigate('/');
+        }
+      })
+      .catch(error => console.error('Error fetching user:', error));
+  }, [navigate]);
 
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
@@ -71,13 +84,24 @@ const Homepage = () => {
         <div className="user-controls">
           <SettingOutlined className="icon" />
           <BellOutlined className="icon" />
-          <div className="user-avatar">
-            <span>S</span>
-          </div>
-          <div className="user-info">
-            <span>Visitor</span>
-            <span className="username">Susan He</span>
-          </div>
+          {user ? (
+            <>
+              <img src={user.photos[0].value} alt="User Profile" className="user-avatar" />
+              <div className="user-info">
+                <span>{user.displayName}</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="user-avatar">
+                <span>S</span>
+              </div>
+              <div className="user-info">
+                <span>Visitor</span>
+                <span className="username">Susan He</span>
+              </div>
+            </>
+          )}
         </div>
       </header>
 
