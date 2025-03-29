@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { SearchOutlined, SettingOutlined, BellOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import './css/Homepage.css';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const HomePage = () => {
+const Homepage = () => {
   const [selectedTab, setSelectedTab] = useState('All');
   const [projects, setProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const navigate = useNavigate();
+
+
 
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
@@ -32,6 +36,10 @@ const HomePage = () => {
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  const handleCreateTour = () => {
+    navigate('/add-tour');
+  };
 
   // Search functionality
   const filteredProjects = projects.filter(project =>
@@ -99,7 +107,7 @@ const HomePage = () => {
           <div className="view-toggle">
             <span className="list-icon">☰</span>
           </div>
-          <button className="create-button">
+          <button className="create-button" onClick={handleCreateTour}>
             <PlusOutlined />
             <span>Create</span>
           </button>
@@ -130,7 +138,7 @@ const HomePage = () => {
             </div>
           ))}
           <div className="project-card empty-card">
-            <div className="empty-indicator">
+            <div className="empty-indicator" onClick={handleCreateTour}>
               <PlusOutlined />
             </div>
           </div>
@@ -140,4 +148,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Homepage;

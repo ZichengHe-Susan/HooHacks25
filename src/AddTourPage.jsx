@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeftOutlined, EnvironmentOutlined, ClockCircleOutlined, ThemeOutlined, UserOutlined, GlobalOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, EnvironmentOutlined, ClockCircleOutlined, FilterOutlined, UserOutlined, GlobalOutlined } from '@ant-design/icons';
 import './css/AddTourPage.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -137,7 +137,7 @@ const AddTourPage = () => {
             
             <div className="form-group">
               <label htmlFor="theme">
-                <ThemeOutlined /> Tour Theme
+                <FilterOutlined /> Tour Theme
               </label>
               <input 
                 type="text"
