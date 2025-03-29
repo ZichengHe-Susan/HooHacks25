@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SearchOutlined, SettingOutlined, BellOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
+import { SearchOutlined, SettingOutlined, BellOutlined, PlusOutlined, SwapOutlined, LogoutOutlined } from '@ant-design/icons';
 import './css/Homepage.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -26,6 +26,16 @@ const Homepage = () => {
       .catch(error => console.error('Error fetching user:', error));
   }, [navigate]);
 
+   // Handle user logout
+   const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:5000/auth/logout', { credentials: 'include' });
+      window.location.href = '/'; // Redirect to login page after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+  
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
     try {
@@ -90,6 +100,9 @@ const Homepage = () => {
               <div className="user-info">
                 <span>{user.displayName}</span>
               </div>
+              <button className="logout-button" onClick={handleLogout}>
+                <LogoutOutlined /> Logout
+              </button>
             </>
           ) : (
             <>

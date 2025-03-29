@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleOutlined } from '@ant-design/icons';
 import './css/Login.css';
 
 const Login = () => {
@@ -24,10 +25,13 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1>Welcome to the App</h1>
-      <button className="google-login-button" onClick={handleLogin}>
-        Sign in with Google
-      </button>
+      <div className="login-content">
+        <h1>Welcome to Museum Planner</h1>
+        <p className="login-description">Sign in to create and manage your museum plans.</p>
+        <button className="google-login-button" onClick={handleLogin}>
+          <GoogleOutlined /> Sign in with Google
+        </button>
+      </div>
     </div>
   );
 };
