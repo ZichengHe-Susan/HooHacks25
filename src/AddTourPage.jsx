@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddTourPage = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   
   const [formData, setFormData] = useState({
     museum: '',
@@ -44,11 +45,15 @@ const AddTourPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically save the data or process it
-    console.log("Form submitted:", formData);
+    // Show the loading modal
+    setShowModal(true);
     
-    // Navigate back to homepage after submission
-    navigate('/');
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      console.log("Form submitted:", formData);
+      // Redirect to the tour plan page after "generating" the plan
+      navigate('/view-tour-plan', { state: { formData } });
+    }, 3000);
   };
 
   const handleCancel = () => {
@@ -190,6 +195,14 @@ const AddTourPage = () => {
           </div>
         </form>
       </div>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="loading-spinner"></div>
+            <p>Generating your personalized tour plan...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

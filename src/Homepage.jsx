@@ -137,8 +137,8 @@ const Homepage = () => {
               </div>
             </div>
           ))}
-          <div className="project-card empty-card">
-            <div className="empty-indicator" onClick={handleCreateTour}>
+          <div className="project-card empty-card"onClick={handleCreateTour}>
+            <div className="empty-indicator" >
               <PlusOutlined />
             </div>
           </div>
