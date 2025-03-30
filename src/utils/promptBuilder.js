@@ -15,8 +15,29 @@ export function buildPrompt(data) {
   - The location of each object inside the museum (gallery names and floor numbers)
   - A brief description of the object
   - An activity the students can do to engage with the object
-  - A representative image (if available or you can suggest a placeholder)
-  
-  Respond in structured JSON format for easy parsing.
+  - A representative image (if available or you can suggest a placeholder) find images using the object title and artist
+  - Notes for the teacher to help them prepare
+  Respond in structured JSON format for easy parsing, strictly following the example structure below, but use this only as a reference. Do not include any other text or explanations outside of the JSON structure.
+  { "schedule": [
+    {
+      "title": "Self-Portrait",
+      "artist": "Vincent van Gogh",
+      "location": "Gallery 825",
+      "timeAllocated": 10,
+      "imageURL": "https://www.vangoghmuseum.nl/en/collection/s0016V1962",
+      "activity": "In pairs, students observe the emotions in Van Gogh’s brushstrokes. Then they share one word describing how it feels to look at this painting.",
+      "notes": "Focus on self-awareness and expression through art."
+    },
+    {
+      "title": "Water Lilies",
+      "artist": "Claude Monet",
+      "location": "Gallery 818",
+      "timeAllocated": 10,
+      "imageURL": "https://www.slam.org/collection/objects/1930/",
+      "activity": "Have students quietly observe the painting for 1 minute, then share how it makes them feel. Encourage them to describe the colors and shapes they notice.",
+      "notes": "Tie in relaxation and the calming effect of water themes."
+    },
+  ]
+}
   `;
   }
