@@ -49,11 +49,50 @@ const AddTourPage = () => {
     setShowModal(true);
   
     // Simulate API call with a timeout
-    setTimeout(() => {
-      console.log("Form submitted:", formData);
-      // Redirect to the tour plan page after "generating" the plan
-      navigate('/view-tour-plan', { state: { formData } });
-    }, 3000);
+    // setTimeout(() => {
+    //   console.log("Form submitted:", formData);
+    //   // Redirect to the tour plan page after "generating" the plan
+    //   navigate('/view-tour-plan', { state: { formData } });
+    // }, 3000);
+    try {
+      // Prepare the data to send to the backend
+      const parseDuration = (durationStr) => {
+        const match = durationStr.match(/(\d+(\.\d+)?)/);
+        return match ? parseFloat(match[0]) * 60 : 60; // default to 60 if can't parse
+      };
+      const requestData = {
+        museum: formData.museum,
+        ageGroup: formData.ageGroup,
+        languageLevel: formData.englishLevel, // rename
+        background: "Basic knowledge of art history", // you can customize this
+        theme: formData.theme,
+        totalTime: parseDuration(formData.duration),
+      };
+  
+      // Make the API call to generate the tour plan
+      const response = await fetch('http://localhost:5001/api/generate-tour-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData),
+      });
+  
+      if (!response.ok) {
+        console.log("Error generating tour plan:", error);
+        console.log("Response:", response);
+        throw new Error('Failed to generate tour plan');
+      }
+  
+      // Parse the response from the backend
+      const result = await response.json();
+  
+      // Navigate to the view-tour-plan page with the generated plan
+      navigate('/view-tour-plan', { state: { plan: result.plan, formData: formData} });
+    } catch (error) {
+      console.error('Error generating tour plan:', error);
+      setError('Failed to generate tour plan. Please try again.');
+    } finally {
+      setShowModal(false); // Hide the loading modal
+    }
   };
 
   const handleCancel = () => {

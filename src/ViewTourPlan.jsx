@@ -6,70 +6,49 @@ import './css/ViewTourPlan.css';
 const ViewTourPlan = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { formData } = location.state || {};
-  
-  // Sample artwork data (this would normally come from your AI generation)
-  const artworks = [
-    {
-      id: 1,
-      title: "Portrait of Jean Dandois",
-      image: "./image/Fralin Museum of Art.jpg", // You'll need actual image paths
-      artist: "Gustave Caillebotte",
-      year: "1885",
-      location: "Gallery 2, East Wing, 1st Floor",
-      description: "This portrait shows a man in formal attire, reflecting the style of Parisian society in the late 19th century.",
-      suggestedQuestions: [
-        "Notice the positioning of the figure and how it creates a sense of formality. How does this compare to modern portraiture?",
-        "What can we learn about social class from the clothing and posture of the subject?"
-      ]
-    },
-    {
-      id: 2,
-      title: "Paris Street, Rainy Day",
-      image: "./image/Fralin Museum of Art.jpg",
-      artist: "Gustave Caillebotte",
-      year: "1877",
-      location: "Gallery 3, Main Exhibition Hall",
-      description: "One of Caillebotte's most famous works depicting modern urban life in Paris after Haussmann's renovation.",
-      suggestedQuestions: [
-        "How does the artist use perspective to create depth in this urban scene?",
-        "What does this painting tell us about city life in late 19th century Paris?"
-      ]
-    },
-    // Add more artworks as needed
-  ];
+  const { plan, formData } = location.state || {}; // Retrieve AI-generated plan and form data
+
+  // Handle the case where no plan is passed
+  if (!plan) {
+    return (
+      <div className="view-tour-container">
+        <h1>No Tour Plan Found</h1>
+        <button onClick={() => navigate('/add-tour')}>Go Back</button>
+      </div>
+    );
+  }
 
   const handleSavePlan = async () => {
     try {
-        // Fetch the logged-in user
-        const userResponse = await fetch('http://localhost:5001/auth/user', { credentials: 'include' });
-        const userData = await userResponse.json();
+      // Fetch the logged-in user
+      const userResponse = await fetch('http://localhost:5001/auth/user', { credentials: 'include' });
+      const userData = await userResponse.json();
 
-        if (!userData || !userData.id) {
-            console.error("User not logged in.");
-            return;
-        }
+      if (!userData || !userData.id) {
+        console.error("User not logged in.");
+        return;
+      }
 
-        const response = await fetch('http://localhost:5001/api/tours', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...formData, userId: userData.id })
-        });
+      const response = await fetch('http://localhost:5001/api/tours', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, userId: userData.id })
+      });
 
-        if (response.ok) {
-            console.log("Tour saved successfully");
-            navigate('/homepage'); // Redirect to homepage
-        } else {
-            const errorData = await response.json();
-            console.error("Failed to save tour:", errorData.error);
-        }
+      if (response.ok) {
+        console.log("Tour saved successfully");
+        navigate('/homepage'); // Redirect to homepage
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to save tour:", errorData.error);
+      }
     } catch (error) {
-        console.error("Error saving tour:", error);
+      console.error("Error saving tour:", error);
     }
   };
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/homepage');
   };
 
   return (
@@ -80,7 +59,7 @@ const ViewTourPlan = () => {
           <ArrowLeftOutlined /> Back to Plans
         </div>
         <div className="page-title">
-          Your Tour Plan: {formData?.museum}
+          Your Tour Plan: {formData?.theme || 'Untitled Tour'}
         </div>
         <div className="save-button" onClick={handleSavePlan}>
           Save Plan
@@ -109,30 +88,43 @@ const ViewTourPlan = () => {
       <div className="artwork-timeline">
         <h2 className="artwork-journey-title">Recommended Artwork Journey</h2>
         
-        {artworks.map((artwork, index) => (
-          <div key={artwork.id} className={`timeline-item ${index % 2 === 0 ? 'odd-row' : 'even-row'}`}>
+        {plan.schedule.map((artwork, index) => (
+          <div key={index} className={`timeline-item ${index % 2 === 0 ? 'odd-row' : 'even-row'}`}>
             <div className="timeline-number">{index + 1}</div>
             <div className="artwork-card">
               <div className="artwork-image-container">
                 <div className="artwork-image-placeholder">
-                  <img src={artwork.image} alt={artwork.title} className="artwork-image" />
+                <img
+                  src={artwork.imageURL || '/image/default_museum.jpg'}
+                  alt={artwork.title}
+                  className="artwork-image"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = '/image/default_museum.jpg'; // Fallback to default image
+                  }}
+                />
                 </div>
               </div>
               
               <div className="artwork-info">
-                <h3>{artwork.title} ({artwork.year})</h3>
-                <p className="artist-name">{artwork.artist}</p>
-                <p className="location-info">
-                  <EnvironmentOutlined /> {artwork.location}
+                <h3>{artwork.title} ({artwork.year || 'Unknown Year'})</h3>
+                <p className="artist-name">{artwork.artist || 'Unknown Artist'}</p>
+                <p className="time-allocated">
+                  <ClockCircleOutlined /> {artwork.timeAllocated} minutes
                 </p>
-                <p className="artwork-description">{artwork.description}</p>
+                <p className="location-info">
+                  <EnvironmentOutlined /> {artwork.location || 'Unknown Location'}
+                </p>
+                <p className="artwork-description">{artwork.description || 'No description available.'}</p>
                 
                 <div className="interaction-section">
                   <h4><MessageOutlined /> Suggested Interactions</h4>
                   <ul className="question-list">
-                    {artwork.suggestedQuestions.map((question, qIndex) => (
-                      <li key={qIndex}>{question}</li>
-                    ))}
+                    {artwork.activity ? (
+                      <li>{artwork.activity}</li>
+                    ) : (
+                      <li>No suggested interactions available.</li>
+                    )}
                   </ul>
                 </div>
               </div>

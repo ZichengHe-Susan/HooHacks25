@@ -12,10 +12,14 @@ import mongoose from 'mongoose';
 dotenv.config();
 const app = express();
 
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000', 'http://localhost:5001'],
+  credentials: true
+}));
+
 // app.use(express.json());
 app.use(express.json());
 app.use('/api', openaiHandler);
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000'], credentials: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
@@ -131,7 +135,7 @@ app.get('/auth/logout', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
