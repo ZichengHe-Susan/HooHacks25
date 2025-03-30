@@ -40,7 +40,8 @@ mongoose.connect(process.env.MONGODB_URI, {
     theme: String,
     duration: String,
     additionalRequirements: String,
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    userId: { type: String, required: true }
   });
 
   const Tour = mongoose.model('Tour', tourSchema);
@@ -48,7 +49,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 // API Route: Fetch All Tours
 app.get('/api/tours', async (req, res) => {
   try {
-    const tours = await Tour.find();
+    const userId = req.query.user; // Get user ID from frontend request
+    if (!userId) return res.status(400).json({ error: "User ID is required" });
+
+    const tours = await Tour.find({ userId }); // Fetch only user's tours
     res.json(tours);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch tours" });
@@ -57,26 +61,38 @@ app.get('/api/tours', async (req, res) => {
 
 app.post('/api/tours', async (req, res) => {
   try {
-    const { museum, ageGroup, englishLevel, theme, duration, additionalRequirements } = req.body;
-    const currentDate = new Date().toISOString().split('T')[0];
-    
-    // Count existing tours with the same museum and date
-    const existingTours = await Tour.find({ museum, createdAt: { $gte: new Date(currentDate) } });
-    const tourCount = existingTours.length;
-    
-    // Generate title
-    let title = `${museum} - ${currentDate}`;
-    if (tourCount > 0) {
-      title += ` (${tourCount})`;
-    }
-    
-    const newTour = new Tour({ title, museum, ageGroup, englishLevel, theme, duration, additionalRequirements });
-    await newTour.save();
-    res.status(201).json({ message: "Tour created successfully", tour: newTour });
+      const { museum, ageGroup, englishLevel, theme, duration, additionalRequirements, userId } = req.body;
+      const currentDate = new Date().toISOString().split('T')[0];
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+      // Count existing tours with the same museum and date
+      const existingTours = await Tour.find({ museum, createdAt: { $gte: new Date(currentDate) } });
+      const tourCount = existingTours.length;
+      // Generate title
+      let title = `${museum} - ${currentDate}`;
+      if (tourCount > 0) {
+        title += ` (${tourCount})`;
+      }
+
+      const newTour = new Tour({ 
+          title,
+          museum,
+          ageGroup,
+          englishLevel,
+          theme,
+          duration,
+          additionalRequirements,
+          userId
+      });
+
+      await newTour.save();
+      res.status(201).json({ message: "Tour created successfully", tour: newTour });
   } catch (error) {
-    res.status(500).json({ error: "Failed to create tour" });
+      res.status(500).json({ error: "Failed to create tour" });
   }
 });
+
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,

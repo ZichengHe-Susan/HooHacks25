@@ -204,7 +204,6 @@
   background-color: #4a86e8;
 }
 
-/* Recent Designs Section */
 .recent-designs {
   padding: 24px;
 }
@@ -250,9 +249,10 @@
 .project-title {
   font-size: 14px;
   margin: 0 0 4px 0;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: wrap;
+  display: inline-block;
+  width: 100%;
 }
 
 .project-type {
@@ -274,4 +274,20 @@
 .empty-indicator {
   font-size: 24px;
   color: #ccc;
+}
+
+.logout-button {
+  background-color: #ff4d4f;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 16px;
+}
+
+.logout-button:hover {
+  background-color: #d9363e;
 }
