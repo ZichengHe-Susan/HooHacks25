@@ -17,11 +17,13 @@ export function buildPrompt(data) {
   - An activity the students can do to engage with the object
   - A representative image (if available or you can suggest a placeholder) find images using the object title and artist
   - Notes for the teacher to help them prepare
+  time alocated for each object must strictly add up to the total time of the tour
   Respond in structured JSON format for easy parsing, strictly following the example structure below, but use this only as a reference. Do not include any other text or explanations outside of the JSON structure.
   { "schedule": [
     {
       "title": "Self-Portrait",
       "artist": "Vincent van Gogh",
+      "year": "1889",
       "description": "A self-portrait of the artist, showcasing his unique brushwork and color palette.",
       "location": "Gallery 825",
       "timeAllocated": 10,
@@ -32,6 +34,7 @@ export function buildPrompt(data) {
     {
       "title": "Water Lilies",
       "artist": "Claude Monet",
+      "year": "1916",
       "description": "A series of paintings depicting Monet's flower garden at Giverny, emphasizing light and color.",
       "location": "Gallery 818",
       "timeAllocated": 10,
