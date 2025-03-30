@@ -56,17 +56,13 @@ const AddTourPage = () => {
     // }, 3000);
     try {
       // Prepare the data to send to the backend
-      const parseDuration = (durationStr) => {
-        const match = durationStr.match(/(\d+(\.\d+)?)/);
-        return match ? parseFloat(match[0]) * 60 : 60; // default to 60 if can't parse
-      };
       const requestData = {
         museum: formData.museum,
         ageGroup: formData.ageGroup,
         languageLevel: formData.englishLevel, // rename
         background: "Basic knowledge of art history", // you can customize this
         theme: formData.theme,
-        totalTime: parseDuration(formData.duration),
+        totalTime: formData.duration
       };
   
       // Make the API call to generate the tour plan
