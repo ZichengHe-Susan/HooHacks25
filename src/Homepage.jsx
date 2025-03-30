@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SearchOutlined, SettingOutlined, BellOutlined, PlusOutlined, SwapOutlined } from '@ant-design/icons';
+import { SearchOutlined, SettingOutlined, BellOutlined, PlusOutlined, SwapOutlined, LogoutOutlined } from '@ant-design/icons';
 import './css/Homepage.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,29 +9,58 @@ const Homepage = () => {
   const [projects, setProjects] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch user data
+  useEffect(() => {
+    fetch('http://localhost:5001/auth/user', { credentials: 'include' })
+      .then(response => response.json())
+      .then(data => {
+        if (data) {
+          setUser(data);
+        } else {
+          navigate('/');
+        }
+      })
+      .catch(error => console.error('Error fetching user:', error));
+  }, [navigate]);
 
+   // Handle user logout
+   const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:5001/auth/logout', { credentials: 'include' });
+      window.location.href = '/'; // Redirect to login page after logout
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
 
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
     try {
-      // Uncomment when MongoDB is available
-      // const response = await axios.get('/api/projects');
-      // setProjects(response.data);
-
-      // Placeholder data for testing without MongoDB
-      setProjects([
-        { id: 1, title: 'Mindfulness Tour – The Met', type: 'Theme: Mindfulness', image: './image/fralin1.jpg' },
-        { id: 2, title: 'Historical Highlights – British Museum', type: 'Theme: Historical Exploration', image: './image/fralin1.jpg' },
-        { id: 3, title: 'Engagement Trail – SF MoMA', type: 'Theme: Visitor Engagement', image: './image/fralin1.jpg' },
-        { id: 4, title: 'Solo Calm Walk – Louvre', type: 'Theme: Peaceful Strolling', image: './image/fralin1.jpg' },
-        { id: 5, title: 'Ancient Civilizations – Smithsonian', type: 'Theme: Ancient Worlds', image: './image/fralin1.jpg' }
-      ]);
+      const response = await fetch('http://localhost:5001/api/tours');
+      const data = await response.json();
+      setProjects(data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
+
+  // Placeholder data for testing without MongoDB
+  // const fetchProjects = async () => {
+  //   try {
+  //     setProjects([
+  //       { id: 1, title: 'Mindfulness Tour – The Met', type: 'Theme: Mindfulness', image: './image/fralin1.jpg' },
+  //       { id: 2, title: 'Historical Highlights – British Museum', type: 'Theme: Historical Exploration', image: './image/fralin1.jpg' },
+  //       { id: 3, title: 'Engagement Trail – SF MoMA', type: 'Theme: Visitor Engagement', image: './image/fralin1.jpg' },
+  //       { id: 4, title: 'Solo Calm Walk – Louvre', type: 'Theme: Peaceful Strolling', image: './image/fralin1.jpg' },
+  //       { id: 5, title: 'Ancient Civilizations – Smithsonian', type: 'Theme: Ancient Worlds', image: './image/fralin1.jpg' }
+  //     ]);
+  //   } catch (error) {
+  //     console.error('Error fetching projects:', error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchProjects();
@@ -43,7 +72,7 @@ const Homepage = () => {
 
   // Search functionality
   const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchQuery.toLowerCase())
+  project.title && project.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Sorting functionality
@@ -71,13 +100,27 @@ const Homepage = () => {
         <div className="user-controls">
           <SettingOutlined className="icon" />
           <BellOutlined className="icon" />
-          <div className="user-avatar">
-            <span>S</span>
-          </div>
-          <div className="user-info">
-            <span>Visitor</span>
-            <span className="username">Susan He</span>
-          </div>
+          {user ? (
+            <>
+              <img src={user.photos[0].value} alt="User Profile" className="user-avatar" />
+              <div className="user-info">
+                <span>{user.displayName}</span>
+              </div>
+              <button className="logout-button" onClick={handleLogout}>
+                <LogoutOutlined /> Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="user-avatar">
+                <span>S</span>
+              </div>
+              <div className="user-info">
+                <span>Visitor</span>
+                <span className="username">Susan He</span>
+              </div>
+            </>
+          )}
         </div>
       </header>
 

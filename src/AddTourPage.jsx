@@ -16,6 +16,8 @@ const AddTourPage = () => {
     additionalRequirements: ''
   });
 
+  const [error, setError] = useState(null);
+
   const museums = [
     "Metropolitan Museum of Art (The Met)",
     "Museum of Modern Art (MoMA)",
@@ -30,24 +32,22 @@ const AddTourPage = () => {
   ];
 
   const ageGroups = ["Under 12", "12-18", "19-30", "31-50", "51-65", "Over 65"];
-  
   const englishLevels = ["Native", "Advanced", "Intermediate", "Beginner", "Limited"];
-  
   const durations = ["30 minutes", "1 hour", "1.5 hours", "2 hours", "2.5 hours", "3+ hours"];
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Show the loading modal
-    setShowModal(true);
+    // Here you would typically save the data or process it
+    console.log("Form submitted:", formData);
     
+    // Navigate back to homepage after submission
+      // Show the loading modal
+    setShowModal(true);
+  
     // Simulate API call with a timeout
     setTimeout(() => {
       console.log("Form submitted:", formData);
@@ -62,35 +62,23 @@ const AddTourPage = () => {
 
   return (
     <div className="add-tour-container">
-      {/* Header */}
       <header className="header">
         <div className="back-button" onClick={handleCancel}>
           <ArrowLeftOutlined /> Back to Plans
         </div>
-        <div className="page-title">
-          Create New Tour Plan
-        </div>
+        <div className="page-title">Create New Tour Plan</div>
         <div className="empty-space"></div>
       </header>
 
-      {/* Main Form */}
       <div className="tour-form-container">
         <form onSubmit={handleSubmit} className="tour-form">
           <div className="form-section">
             <h2 className="section-title">Basic Configuration</h2>
-            
             <div className="form-group">
               <label htmlFor="museum">
                 <EnvironmentOutlined /> Select Museum
               </label>
-              <select 
-                id="museum"
-                name="museum"
-                value={formData.museum}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
+              <select id="museum" name="museum" value={formData.museum} onChange={handleChange} className="form-control" required>
                 <option value="" disabled>Select a museum</option>
                 {museums.map((museum, index) => (
                   <option key={index} value={museum}>{museum}</option>
@@ -102,14 +90,7 @@ const AddTourPage = () => {
               <label htmlFor="ageGroup">
                 <UserOutlined /> Age Group
               </label>
-              <select 
-                id="ageGroup"
-                name="ageGroup"
-                value={formData.ageGroup}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
+              <select id="ageGroup" name="ageGroup" value={formData.ageGroup} onChange={handleChange} className="form-control" required>
                 <option value="" disabled>Select age group</option>
                 {ageGroups.map((age, index) => (
                   <option key={index} value={age}>{age}</option>
@@ -121,14 +102,7 @@ const AddTourPage = () => {
               <label htmlFor="englishLevel">
                 <GlobalOutlined /> English Proficiency
               </label>
-              <select 
-                id="englishLevel"
-                name="englishLevel"
-                value={formData.englishLevel}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
+              <select id="englishLevel" name="englishLevel" value={formData.englishLevel} onChange={handleChange} className="form-control" required>
                 <option value="" disabled>Select proficiency level</option>
                 {englishLevels.map((level, index) => (
                   <option key={index} value={level}>{level}</option>
@@ -139,20 +113,11 @@ const AddTourPage = () => {
 
           <div className="form-section">
             <h2 className="section-title">Tour Preferences</h2>
-            
             <div className="form-group">
               <label htmlFor="theme">
                 <FilterOutlined /> Tour Theme
               </label>
-              <input 
-                type="text"
-                id="theme"
-                name="theme"
-                value={formData.theme}
-                onChange={handleChange}
-                placeholder="e.g. Modern Art, Historical Paintings, Sculptures..."
-                className="form-control"
-              />
+              <input type="text" id="theme" name="theme" value={formData.theme} onChange={handleChange} placeholder="e.g. Modern Art, Historical Paintings, Sculptures..." className="form-control" />
               <small className="form-hint">Describe the theme or focus of your tour</small>
             </div>
 
@@ -160,14 +125,7 @@ const AddTourPage = () => {
               <label htmlFor="duration">
                 <ClockCircleOutlined /> Duration
               </label>
-              <select 
-                id="duration"
-                name="duration"
-                value={formData.duration}
-                onChange={handleChange}
-                className="form-control"
-                required
-              >
+              <select id="duration" name="duration" value={formData.duration} onChange={handleChange} className="form-control" required>
                 <option value="" disabled>Select duration</option>
                 {durations.map((duration, index) => (
                   <option key={index} value={duration}>{duration}</option>
@@ -177,17 +135,11 @@ const AddTourPage = () => {
 
             <div className="form-group">
               <label htmlFor="additionalRequirements">Additional Requirements (Optional)</label>
-              <textarea 
-                id="additionalRequirements"
-                name="additionalRequirements"
-                value={formData.additionalRequirements}
-                onChange={handleChange}
-                placeholder="Any special requirements or preferences for your tour..."
-                className="form-control textarea"
-                rows="4"
-              ></textarea>
+              <textarea id="additionalRequirements" name="additionalRequirements" value={formData.additionalRequirements} onChange={handleChange} placeholder="Any special requirements or preferences for your tour..." className="form-control textarea" rows="4"></textarea>
             </div>
           </div>
+
+          {error && <div className="error-message">{error}</div>}
 
           <div className="form-actions">
             <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
