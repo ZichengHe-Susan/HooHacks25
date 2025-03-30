@@ -26,6 +26,23 @@ const Homepage = () => {
       .catch(error => console.error('Error fetching user:', error));
   }, [navigate]);
 
+  // Fetch only the logged-in user's tours
+  const fetchUserProjects = async () => {
+    try {
+      if (user) {
+        const response = await fetch(`http://localhost:5001/api/tours?user=${user.id}`);
+        const data = await response.json();
+        setProjects(data);
+      }
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) fetchUserProjects();
+  }, [user]);
+
    // Handle user logout
    const handleLogout = async () => {
     try {
@@ -36,16 +53,6 @@ const Homepage = () => {
     }
   };
 
-  // Placeholder function to simulate fetching data from MongoDB
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/api/tours');
-      const data = await response.json();
-      setProjects(data);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-    }
-  };
 
   // Placeholder data for testing without MongoDB
   // const fetchProjects = async () => {
@@ -61,10 +68,6 @@ const Homepage = () => {
   //     console.error('Error fetching projects:', error);
   //   }
   // };
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
 
   const handleCreateTour = () => {
     navigate('/add-tour');

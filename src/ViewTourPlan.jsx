@@ -39,10 +39,33 @@ const ViewTourPlan = () => {
     // Add more artworks as needed
   ];
 
-  const handleSavePlan = () => {
-    // Here you would save the plan to a backend
-    // For now, just redirect to home
-    navigate('/');
+  const handleSavePlan = async () => {
+    try {
+        // Fetch the logged-in user
+        const userResponse = await fetch('http://localhost:5001/auth/user', { credentials: 'include' });
+        const userData = await userResponse.json();
+
+        if (!userData || !userData.id) {
+            console.error("User not logged in.");
+            return;
+        }
+
+        const response = await fetch('http://localhost:5001/api/tours', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, userId: userData.id })
+        });
+
+        if (response.ok) {
+            console.log("Tour saved successfully");
+            navigate('/homepage'); // Redirect to homepage
+        } else {
+            const errorData = await response.json();
+            console.error("Failed to save tour:", errorData.error);
+        }
+    } catch (error) {
+        console.error("Error saving tour:", error);
+    }
   };
 
   const handleBack = () => {
