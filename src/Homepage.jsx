@@ -35,26 +35,32 @@ const Homepage = () => {
       console.error('Error logging out:', error);
     }
   };
-  
+
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
     try {
-      // Uncomment when MongoDB is available
-      // const response = await axios.get('/api/projects');
-      // setProjects(response.data);
-
-      // Placeholder data for testing without MongoDB
-      setProjects([
-        { id: 1, title: 'Mindfulness Tour – The Met', type: 'Theme: Mindfulness', image: './image/fralin1.jpg' },
-        { id: 2, title: 'Historical Highlights – British Museum', type: 'Theme: Historical Exploration', image: './image/fralin1.jpg' },
-        { id: 3, title: 'Engagement Trail – SF MoMA', type: 'Theme: Visitor Engagement', image: './image/fralin1.jpg' },
-        { id: 4, title: 'Solo Calm Walk – Louvre', type: 'Theme: Peaceful Strolling', image: './image/fralin1.jpg' },
-        { id: 5, title: 'Ancient Civilizations – Smithsonian', type: 'Theme: Ancient Worlds', image: './image/fralin1.jpg' }
-      ]);
+      const response = await fetch('http://localhost:5000/api/tours');
+      const data = await response.json();
+      setProjects(data);
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
   };
+
+  // Placeholder data for testing without MongoDB
+  // const fetchProjects = async () => {
+  //   try {
+  //     setProjects([
+  //       { id: 1, title: 'Mindfulness Tour – The Met', type: 'Theme: Mindfulness', image: './image/fralin1.jpg' },
+  //       { id: 2, title: 'Historical Highlights – British Museum', type: 'Theme: Historical Exploration', image: './image/fralin1.jpg' },
+  //       { id: 3, title: 'Engagement Trail – SF MoMA', type: 'Theme: Visitor Engagement', image: './image/fralin1.jpg' },
+  //       { id: 4, title: 'Solo Calm Walk – Louvre', type: 'Theme: Peaceful Strolling', image: './image/fralin1.jpg' },
+  //       { id: 5, title: 'Ancient Civilizations – Smithsonian', type: 'Theme: Ancient Worlds', image: './image/fralin1.jpg' }
+  //     ]);
+  //   } catch (error) {
+  //     console.error('Error fetching projects:', error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchProjects();
@@ -66,7 +72,7 @@ const Homepage = () => {
 
   // Search functionality
   const filteredProjects = projects.filter(project =>
-    project.title.toLowerCase().includes(searchQuery.toLowerCase())
+  project.title && project.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Sorting functionality
