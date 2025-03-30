@@ -175,8 +175,12 @@ const Homepage = () => {
           {sortedProjects.map(project => (
             <div key={project.id} className="project-card">
               <div className="project-image">
-                <img src={project.image} alt={project.title} />
-              </div>
+                <img 
+                  src={`/image/${project.museum}.jpg`} 
+                  alt={project.museum} 
+                  onError={(e) => e.target.src = '/image/Fralin Museum of Art.jpg'} // Fallback image if missing
+                />
+              </div>  
               <div className="project-info">
                 <h3 className="project-title">{project.title}</h3>
                 <p className="project-type">{project.type}</p>

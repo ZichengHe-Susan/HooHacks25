@@ -13,7 +13,7 @@ const ViewTourPlan = () => {
     {
       id: 1,
       title: "Portrait of Jean Dandois",
-      image: "./image/fralin1.jpg", // You'll need actual image paths
+      image: "./image/Fralin Museum of Art.jpg", // You'll need actual image paths
       artist: "Gustave Caillebotte",
       year: "1885",
       location: "Gallery 2, East Wing, 1st Floor",
@@ -26,7 +26,7 @@ const ViewTourPlan = () => {
     {
       id: 2,
       title: "Paris Street, Rainy Day",
-      image: "./image/fralin1.jpg",
+      image: "./image/Fralin Museum of Art.jpg",
       artist: "Gustave Caillebotte",
       year: "1877",
       location: "Gallery 3, Main Exhibition Hall",

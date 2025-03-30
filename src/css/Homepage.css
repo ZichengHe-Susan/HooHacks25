@@ -249,9 +249,10 @@
 .project-title {
   font-size: 14px;
   margin: 0 0 4px 0;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: wrap;
+  display: inline-block;
+  width: 100%;
 }
 
 .project-type {
