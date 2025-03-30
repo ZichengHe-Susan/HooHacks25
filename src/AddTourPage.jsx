@@ -43,7 +43,7 @@ const AddTourPage = () => {
     setError(null);
     
     try {
-      const response = await fetch('http://localhost:5000/api/tours', {
+      const response = await fetch('http://localhost:5001/api/tours', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

@@ -2,7 +2,7 @@ import express from 'express';
 import fetch from 'node-fetch';         // If you're using Node 18+, you can use the built-in fetch API instead of installing node-fetch
 import dotenv from 'dotenv';
 import process from 'process';
-import { buildPrompt } from '../../utils/promptBuilder.js';
+import { buildPrompt } from '../../src/utils/promptBuilder.js';
 
 
 dotenv.config(); // Loads .env variables into process.env (e.g. HF_API_TOKEN)

@@ -8,7 +8,7 @@ const Login = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/auth/user', { credentials: 'include' })
+    fetch('http://localhost:5001/auth/user', { credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         if (data) {
@@ -20,7 +20,7 @@ const Login = () => {
   }, [navigate]);
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    window.location.href = 'http://localhost:5001/auth/google';
   };
 
   return (

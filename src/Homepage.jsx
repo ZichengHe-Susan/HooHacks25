@@ -14,7 +14,7 @@ const Homepage = () => {
 
   // Fetch user data
   useEffect(() => {
-    fetch('http://localhost:5000/auth/user', { credentials: 'include' })
+    fetch('http://localhost:5001/auth/user', { credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         if (data) {
@@ -29,7 +29,7 @@ const Homepage = () => {
    // Handle user logout
    const handleLogout = async () => {
     try {
-      await fetch('http://localhost:5000/auth/logout', { credentials: 'include' });
+      await fetch('http://localhost:5001/auth/logout', { credentials: 'include' });
       window.location.href = '/'; // Redirect to login page after logout
     } catch (error) {
       console.error('Error logging out:', error);
@@ -39,7 +39,7 @@ const Homepage = () => {
   // Placeholder function to simulate fetching data from MongoDB
   const fetchProjects = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/tours');
+      const response = await fetch('http://localhost:5001/api/tours');
       const data = await response.json();
       setProjects(data);
     } catch (error) {
