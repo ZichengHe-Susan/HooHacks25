@@ -1,6 +1,6 @@
 import express, { json } from 'express';
 import dotenv from 'dotenv';
-import openaiHandler from './routes/AIHandler.js';
+import openaiHandler from './server/routes/AIHandler.js';
 import process from 'process';
 import 'dotenv/config';
 import passport from 'passport';
@@ -15,7 +15,7 @@ const app = express();
 // app.use(express.json());
 app.use(express.json());
 app.use('/api', openaiHandler);
-app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'], credentials: true }));
+app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000'], credentials: true }));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
@@ -100,7 +100,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'em
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect(process.env.CLIENT_REDIRECT_URL || 'http://localhost:5001/homepage');
+    res.redirect(process.env.CLIENT_REDIRECT_URL || 'http://localhost:5174/homepage');
   }
 );
 
